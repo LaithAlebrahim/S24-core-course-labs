@@ -7,13 +7,12 @@ WORKDIR /app_python
 COPY requirements.txt app.py /app_python/
 COPY templates/ /app_python/templates/
 
-RUN adduser -D myuser
-RUN mkdir /app/app_python /app/visits && chown -R myuser /app/app_python /app/visits
+RUN mkdir /app_python/data && chown -R ${USER}:${USER} /app_python
 
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-USER myuser
+USER ${USER}
 
 EXPOSE 5000
 
