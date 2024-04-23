@@ -17,6 +17,7 @@ VISITS_FILE_PATH = "data/visits.txt"
 def show_time():
     start_time = time.time()
     moscow_timezone = pytz.timezone('Europe/Moscow')
+    create_visits_file_if_not_exists()
     increment_visits()
     time_now = datetime.now(moscow_timezone).strftime('%Y-%m-%d %H:%M:%S')
     REQUEST_Time.labels(method='GET',
@@ -33,10 +34,13 @@ def increment_visits():
 
 
 def create_visits_file_if_not_exists():
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(VISITS_FILE_PATH), exist_ok=True)
     if os.path.isfile(VISITS_FILE_PATH):
         print("Visits file already exists")
         return
 
+    # Create the file with initial value 0
     init_value = 0
     with open(VISITS_FILE_PATH, "w+") as file:
         file.write(str(init_value))
@@ -64,5 +68,4 @@ def metrics():
 
 
 if __name__ == '__main__':
-    create_visits_file_if_not_exists()
     app.run(debug=False)
